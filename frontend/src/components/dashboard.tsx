@@ -4,9 +4,14 @@ import { useState } from 'react'
 import { CustomButton } from '@/components/buttons/custom-button'
 import Sidebar from '@/components/sidebar'
 import OverviewPage from '@/pages/overview-page'
+import AgentsPage from '@/pages/agents-page'
+import ClientsPage from '@/pages/clients-page'
+import SitesPage from '@/pages/sites-page'
+import AttendancesPage from '@/pages/attendances-page'
+import CorrectionsPage from '@/pages/corrections-page'
+import PayrollsPage from '@/pages/payrolls-page'
 import AnalyticsPage from '@/pages/analytics-page'
 import SettingsPage from '@/pages/settings-page'
-import ButtonShowcase from '@/components/buttons/button-showcase'
 
 interface DashboardProps {
   onLogout: () => void
@@ -19,12 +24,22 @@ export default function Dashboard({ onLogout }: DashboardProps) {
     switch (currentPage) {
       case 'overview':
         return <OverviewPage />
+      case 'agents':
+        return <AgentsPage />
+      case 'clients':
+        return <ClientsPage />
+      case 'sites':
+        return <SitesPage />
+      case 'attendances':
+        return <AttendancesPage />
+      case 'corrections':
+        return <CorrectionsPage />
+      case 'payrolls':
+        return <PayrollsPage />
       case 'analytics':
         return <AnalyticsPage />
       case 'settings':
         return <SettingsPage />
-      case 'buttons':
-        return <ButtonShowcase />
       default:
         return <OverviewPage />
     }

@@ -19,11 +19,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     e.preventDefault()
     setIsLoading(true)
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      const { authAPI } = await import('@/lib/api')
+      await authAPI.login(email, password)
       onLogin()
-    }, 500)
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Login failed')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

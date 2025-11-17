@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, Settings, Home, Palette } from 'lucide-react'
+import { BarChart3, Settings, Home, Users, Building2, MapPin, Clock, FileEdit, DollarSign } from 'lucide-react'
 import { CustomButton } from '@/components/buttons/custom-button'
 
 interface SidebarProps {
@@ -11,9 +11,14 @@ interface SidebarProps {
 export default function Sidebar({ currentPage, onPageChange }: SidebarProps) {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: Home },
+    { id: 'agents', label: 'Agents', icon: Users },
+    { id: 'clients', label: 'Clients', icon: Building2 },
+    { id: 'sites', label: 'Sites', icon: MapPin },
+    { id: 'attendances', label: 'Attendances', icon: Clock },
+    { id: 'corrections', label: 'Corrections', icon: FileEdit },
+    { id: 'payrolls', label: 'Payrolls', icon: DollarSign },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'buttons', label: 'Button Components', icon: Palette },
   ]
 
   return (

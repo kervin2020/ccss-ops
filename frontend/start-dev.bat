@@ -1,4 +1,6 @@
 @echo off
 cd /d "%~dp0"
-npm run dev
+node check-dependencies.js
+node remove-native-rollup.js
+npx vite
 
