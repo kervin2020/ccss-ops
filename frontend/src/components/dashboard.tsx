@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { CustomButton } from '@/components/buttons/custom-button'
-import { Card } from '@/components/ui/card'
 import Sidebar from '@/components/sidebar'
 import OverviewPage from '@/pages/overview-page'
 import AnalyticsPage from '@/pages/analytics-page'
