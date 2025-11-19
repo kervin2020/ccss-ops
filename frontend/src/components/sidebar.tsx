@@ -1,61 +1,95 @@
-'use client'
+import React from "react";
+import { NavLink } from "react-router-dom";
+import {
+    Home,
+    Users,
+    UserCheck,
+    Building2,
+    CalendarCheck,
+    Pencil,
+    Wallet,
+    BarChart3,
+    Settings as SettingsIcon,
+    ChevronLeft,
+} from "lucide-react";
+import classNames from "classnames";
 
-import { BarChart3, Settings, Home, Users, Building2, MapPin, Clock, FileEdit, DollarSign } from 'lucide-react'
-import { CustomButton } from '@/components/buttons/custom-button'
+type SidebarProps = {
+    collapsed: boolean;
+    setCollapsed: (value: boolean) => void;
+};
 
-interface SidebarProps {
-  currentPage: string
-  onPageChange: (page: string) => void
-}
+export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
+    const navItems = [
+        { to: "/dashboard", label: "Overview", icon: <Home size={20} /> },
+        { to: "/dashboard/agents", label: "Agents", icon: <Users size={20} /> },
+        { to: "/dashboard/clients", label: "Clients", icon: <UserCheck size={20} /> },
+        { to: "/dashboard/sites", label: "Sites", icon: <Building2 size={20} /> },
+        { to: "/dashboard/attendances", label: "Attendances", icon: <CalendarCheck size={20} /> },
+        { to: "/dashboard/corrections", label: "Corrections", icon: <Pencil size={20} /> },
+        { to: "/dashboard/payrolls", label: "Payrolls", icon: <Wallet size={20} /> },
+        { to: "/dashboard/analytics", label: "Analytics", icon: <BarChart3 size={20} /> },
+        { to: "/dashboard/settings", label: "Settings", icon: <SettingsIcon size={20} /> },
+    ];
 
-export default function Sidebar({ currentPage, onPageChange }: SidebarProps) {
-  const menuItems = [
-    { id: 'overview', label: 'Overview', icon: Home },
-    { id: 'agents', label: 'Agents', icon: Users },
-    { id: 'clients', label: 'Clients', icon: Building2 },
-    { id: 'sites', label: 'Sites', icon: MapPin },
-    { id: 'attendances', label: 'Attendances', icon: Clock },
-    { id: 'corrections', label: 'Corrections', icon: FileEdit },
-    { id: 'payrolls', label: 'Payrolls', icon: DollarSign },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ]
+    return (
+        <aside
+            className={classNames(
+                "h-screen bg-gray-900 text-white transition-all flex flex-col",
+                collapsed ? "w-20" : "w-64"
+            )}
+        >
+            {/* SIDEBAR HEADER */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                {!collapsed && <h1 className="text-xl font-bold">CCSS Ops</h1>}
 
-  return (
-    <div className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
-      {/* Logo */}
-      <div className="px-6 py-6 border-b border-sidebar-border">
-        <div className="text-xl font-bold text-sidebar-foreground">
-          App Logo
-        </div>
-      </div>
+                <button
+                    onClick={() => setCollapsed(!collapsed)}
+                    className="p-2 rounded hover:bg-gray-700 transition"
+                >
+                    <ChevronLeft
+                        className={classNames(
+                            "transition-transform",
+                            collapsed ? "rotate-180" : ""
+                        )}
+                    />
+                </button>
+            </div>
 
-      {/* Navigation Menu */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {menuItems.map((item) => {
-          const Icon = item.icon
-          const isActive = currentPage === item.id
+            {/* NAVIGATION */}
+            <nav className="flex flex-col mt-2 gap-1">
+                {navItems.map((item) => (
+                    <NavLink
+                        key={item.to}
+                        to={item.to}
+                        end={item.to === "/dashboard"}
+                        className={({ isActive }) =>
+                            classNames(
+                                "flex items-center px-4 py-3 gap-3 hover:bg-gray-800 transition",
+                                isActive ? "bg-gray-800" : ""
+                            )
+                        }
+                    >
+                        {/* ICON */}
+                        <span>{item.icon}</span>
 
-          return (
-            <CustomButton
-              key={item.id}
-              onClick={() => onPageChange(item.id)}
-              variant={isActive ? 'primary' : 'ghost'}
-              className={`w-full justify-start gap-3 px-4 ${
-                isActive ? 'text-primary-foreground' : 'text-sidebar-foreground'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="font-medium">{item.label}</span>
-            </CustomButton>
-          )
-        })}
-      </nav>
+                        {/* LABEL (hidden when collapsed) */}
+                        {!collapsed && <span className="text-sm">{item.label}</span>}
+                    </NavLink>
+                ))}
+            </nav>
 
-      {/* Footer */}
-      <div className="px-4 py-6 border-t border-sidebar-border text-xs text-sidebar-foreground/60">
-        <p>© 2025 Your App. All rights reserved.</p>
-      </div>
-    </div>
-  )
+            {/* FOOTER */}
+            <div className="mt-auto p-4 border-t border-gray-700">
+                {!collapsed ? (
+                    <>
+                        <div className="text-sm text-gray-300">Logged in as</div>
+                        <div className="font-medium">Kervin</div>
+                    </>
+                ) : (
+                    <div className="mx-auto text-gray-300 text-xs">KR</div>
+                )}
+            </div>
+        </aside>
+    );
 }

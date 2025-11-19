@@ -1,128 +1,44 @@
-'use client'
+export default function Overview() {
+    return (
+        <div className="p-6 space-y-6">
+            <h1 className="text-3xl font-bold">Overview</h1>
 
-import { useState, useEffect } from 'react'
-import { Card } from '@/components/ui/card'
-import { agentsAPI, clientsAPI, sitesAPI, attendancesAPI, payrollsAPI } from '@/lib/api'
-import { Users, Building2, MapPin, Clock, DollarSign, TrendingUp } from 'lucide-react'
-
-export default function OverviewPage() {
-  const [stats, setStats] = useState({
-    agents: 0,
-    clients: 0,
-    sites: 0,
-    attendances: 0,
-    payrolls: 0,
-    totalPayroll: 0
-  })
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    loadStats()
-  }, [])
-
-  const loadStats = async () => {
-    try {
-      setLoading(true)
-      const [agents, clients, sites, attendances, payrolls] = await Promise.all([
-        agentsAPI.getAll(),
-        clientsAPI.getAll(),
-        sitesAPI.getAll(),
-        attendancesAPI.getAll(),
-        payrollsAPI.getAll()
-      ])
-      
-      const totalPayroll = payrolls.reduce((sum: number, p: any) => sum + (p.net_pay || 0), 0)
-      
-      setStats({
-        agents: agents.length,
-        clients: clients.length,
-        sites: sites.length,
-        attendances: attendances.length,
-        payrolls: payrolls.length,
-        totalPayroll
-      })
-    } catch (error) {
-      console.error('Failed to load stats:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const statCards = [
-    { label: 'Total Agents', value: stats.agents, icon: Users, color: 'text-blue-600' },
-    { label: 'Clients', value: stats.clients, icon: Building2, color: 'text-green-600' },
-    { label: 'Sites', value: stats.sites, icon: MapPin, color: 'text-purple-600' },
-    { label: 'Attendances', value: stats.attendances, icon: Clock, color: 'text-orange-600' },
-    { label: 'Payrolls', value: stats.payrolls, icon: DollarSign, color: 'text-emerald-600' },
-    { label: 'Total Payroll', value: `$${stats.totalPayroll.toFixed(2)}`, icon: TrendingUp, color: 'text-red-600' },
-  ]
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold text-foreground">Dashboard Overview</h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          Welcome back! Here's your system overview.
-        </p>
-      </div>
-
-      {loading ? (
-        <div className="text-center py-8">Loading statistics...</div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {statCards.map((stat) => {
-              const Icon = stat.icon
-              return (
-                <Card key={stat.label} className="border-border/50 p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-4">
-                    <Icon className={`w-8 h-8 ${stat.color}`} />
-                  </div>
-                  <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-                  </div>
-                </Card>
-              )
-            })}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card className="border-border/50 p-6">
-              <h3 className="font-bold text-foreground mb-4">Quick Actions</h3>
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  • Manage agents, clients, and sites from the sidebar
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  • Record attendance and generate payrolls
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  • Review and approve attendance corrections
-                </p>
-              </div>
-            </Card>
-
-            <Card className="border-border/50 p-6">
-              <h3 className="font-bold text-foreground mb-4">System Status</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">Database</span>
-                  <span className="text-xs px-2 py-1 rounded bg-green-100 text-green-800">Connected</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl shadow p-5">
+                    <p className="text-sm text-gray-500">Total Agents</p>
+                    <p className="text-2xl font-semibold mt-2">128</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">API</span>
-                  <span className="text-xs px-2 py-1 rounded bg-green-100 text-green-800">Active</span>
+
+                <div className="bg-white rounded-xl shadow p-5">
+                    <p className="text-sm text-gray-500">Active Sites</p>
+                    <p className="text-2xl font-semibold mt-2">24</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">Authentication</span>
-                  <span className="text-xs px-2 py-1 rounded bg-green-100 text-green-800">Enabled</span>
+
+                <div className="bg-white rounded-xl shadow p-5">
+                    <p className="text-sm text-gray-500">Today Attendances</p>
+                    <p className="text-2xl font-semibold mt-2">92</p>
                 </div>
-              </div>
-            </Card>
-          </div>
-        </>
-      )}
-    </div>
-  )
+
+                <div className="bg-white rounded-xl shadow p-5">
+                    <p className="text-sm text-gray-500">Pending Corrections</p>
+                    <p className="text-2xl font-semibold mt-2">7</p>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="col-span-2 bg-white rounded-xl shadow p-6 h-64 flex items-center justify-center text-gray-400">
+                    Chart / Timeline Placeholder
+                </div>
+
+                <div className="bg-white rounded-xl shadow p-6">
+                    <h2 className="font-semibold mb-3">Recent Activity</h2>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                        <li>Agent John submitted attendance correction</li>
+                        <li>New site created: Carrefour</li>
+                        <li>Payroll for Oct 2025 processed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    );
 }
