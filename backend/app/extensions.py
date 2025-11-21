@@ -1,9 +1,10 @@
-""" Initialize extensions here to aboid circular imports.
+""" Initialize extensions here to avoid circular imports.
 Extensions are initialized without app (init_app pattern)."""
 
-from flask_sqlalchemy import SQLALchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 
 db = SQLAlchemy()

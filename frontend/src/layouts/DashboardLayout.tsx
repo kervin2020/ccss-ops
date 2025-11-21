@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar";
+import Sidebar from "../components/sidebar";
 import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout() {
