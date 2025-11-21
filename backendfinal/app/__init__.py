@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -8,26 +8,54 @@ import os
 db = SQLAlchemy()
 jwt = JWTManager()
 
+
 def create_app():
     app = Flask(__name__)
-    
+
     # Configuration
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
+    app.config['SECRET_KEY'] = os.environ.get(
+        'SECRET_KEY', 'dev-secret-key-change-in-production')
+    app.config['JWT_SECRET_KEY'] = os.environ.get(
+        'JWT_SECRET_KEY', 'jwt-secret-key-change-in-production')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///security_ops.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+        'DATABASE_URL', 'sqlite:///security_ops.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
+
     # Enable CORS for frontend
-    CORS(app, origins=['http://localhost:5173', 'http://localhost:3000'])
-    
+    # Allow Authorization header so JWT auth works from the browser
+    CORS(app, origins=['http://localhost:5173', 'http://localhost:3000'], supports_credentials=True,
+         allow_headers=['Content-Type', 'Authorization'])
+
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
-    
+
+    # Friendly JSON responses for JWT errors so frontend can parse them
+    @jwt.unauthorized_loader
+    def unauthorized_callback(reason):
+        app.logger.warning('JWT unauthorized: %s - Authorization header: %s',
+                           reason, request.headers.get('Authorization'))
+        return jsonify({'error': reason}), 401
+
+    @jwt.invalid_token_loader
+    def invalid_token_callback(reason):
+        # invalid or malformed token -> 422
+        app.logger.warning('JWT invalid token: %s - Authorization header: %s',
+                           reason, request.headers.get('Authorization'))
+        return jsonify({'error': reason}), 422
+
+    @jwt.expired_token_loader
+    def expired_token_callback(header, payload):
+        return jsonify({'error': 'Token has expired'}), 401
+
+    @jwt.revoked_token_loader
+    def revoked_token_callback(header, payload):
+        return jsonify({'error': 'Token has been revoked'}), 401
+
     # Import models
     from app import models
-    
+
     # Create tables
     with app.app_context():
         db.create_all()
@@ -43,7 +71,7 @@ def create_app():
             admin.set_password('admin123')
             db.session.add(admin)
             db.session.commit()
-    
+
     # Register blueprints (routes)
     from app.routes import auth, agents, clients, sites, attendances, corrections, payrolls
     app.register_blueprint(auth.bp)
@@ -53,6 +81,5 @@ def create_app():
     app.register_blueprint(attendances.bp)
     app.register_blueprint(corrections.bp)
     app.register_blueprint(payrolls.bp)
-    
-    return app
 
+    return app

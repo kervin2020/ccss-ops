@@ -6,7 +6,7 @@ import { CustomButton } from '@/components/buttons/custom-button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-
+import logo from '../assets/CorvingtonLogo.jpg'
 interface LoginPageProps {
   onLogin: () => void
 }
@@ -40,9 +40,8 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             {/* Header */}
             <div className="space-y-2 text-center">
               <div className="text-3xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
+                <img src={logo} alt="Logo" className="mx-auto h-30 w-30" />
                 <p className="text-gray-800">Welcome </p>
-                <p>to</p>
-                <span className="text-gray-800">CCSS</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Sign in to access your workspace
