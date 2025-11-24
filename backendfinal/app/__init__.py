@@ -73,7 +73,23 @@ def create_app():
             db.session.commit()
 
     # Register blueprints (routes)
-    from app.routes import auth, agents, clients, sites, attendances, corrections, payrolls
+    from app.routes import (
+        auth,
+        agents,
+        clients,
+        sites,
+        attendances,
+        corrections,
+        payrolls,
+        shifts,
+        leaves,
+        incidents,
+        invoices,
+        equipment,
+        trainings,
+        documents,
+        notifications,
+    )
     app.register_blueprint(auth.bp)
     app.register_blueprint(agents.bp)
     app.register_blueprint(clients.bp)
@@ -81,5 +97,13 @@ def create_app():
     app.register_blueprint(attendances.bp)
     app.register_blueprint(corrections.bp)
     app.register_blueprint(payrolls.bp)
+    app.register_blueprint(shifts.bp)
+    app.register_blueprint(leaves.bp)
+    app.register_blueprint(incidents.bp)
+    app.register_blueprint(invoices.bp)
+    app.register_blueprint(equipment.bp)
+    app.register_blueprint(trainings.bp)
+    app.register_blueprint(documents.bp)
+    app.register_blueprint(notifications.bp)
 
     return app

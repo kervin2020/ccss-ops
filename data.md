@@ -1,5 +1,5 @@
 
-📊 ENTITÉS & ATTRIBUTS DÉTAILLÉS
+
 1. USER (Utilisateurs Système) 👤
 Description : Personnel administratif qui accède au système
 sqlUSER
